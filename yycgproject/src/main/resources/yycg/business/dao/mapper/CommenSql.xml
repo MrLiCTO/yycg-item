@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="yycg.business.commenSql" >
+  		<sql id="page_start">
+  			<if test="pageQuery!=null">
+			<!-- select page_sysuser2.* from
+			(
+			select page_sysuser1.*,rownum page_num from
+			( -->
+			
+			select page_2.*
+			from (select page_1.*, rownum page_num
+			from
+			(
+		</if>
+  		
+  		</sql>
+  		<sql id="page_end">
+  			
+  		<if test="pageQuery!=null">
+			<!-- )page_sysuser1
+		<![CDATA[
+		where rownum <= ${pageQuery.PageQuery_end}
+		]]>
+		)page_sysuser2
+
+		where
+		page_sysuser2.page_num >= ${pageQuery.PageQuery_start} -->
+		
+		
+		) page_1
+        <![CDATA[
+         where rownum <= ${pageQuery.PageQuery_end}) page_2
+ 		where page_2.page_num >= ${pageQuery.PageQuery_start}
+ 		]]>
+ 		
+		</if>
+  		</sql>
+</mapper>

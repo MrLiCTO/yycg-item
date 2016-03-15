@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="yycg.business.dao.mapper.GysypmlControlMapperCustom" >
+	
+
+
+  		<select id="findGysypmControlList" parameterType="yycg.business.pojo.vo.GysypmlQueryVo"
+  		resultType="yycg.business.pojo.vo.GysypmlCustom">
+  		
+  		<if test="pageQuery!=null">
+			select page_sysuser2.* from
+			(
+			select page_sysuser1.*,rownum page_num from
+			(
+		</if>
+
+		<!-- 分页尾头 -->
+  		
+  		select usergys.mc usergysmc,
+       usergys.id usergysid,
+       gysypml_control.id gysypmlid,
+       gysypml_control.control,
+       gysypml_control.advice,
+       (select info
+          from dictinfo
+         where typecode = '008'
+           and dictcode = gysypml_control.control) controlmc,
+       
+       ypxx.id,
+       ypxx.bm,
+       ypxx.mc,
+       ypxx.jx,
+       ypxx.gg,
+       ypxx.zhxs,
+       ypxx.scqymc,
+       ypxx.spmc,
+       ypxx.zbjg,
+       ypxx.jyzt,
+       
+       (select info
+          from dictinfo
+         where ypxx.jyzt = dictcode
+           and typecode = '003') jyztmc
+
+ 		 from usergys, gysypml_control, ypxx
+ 		where gysypml_control.usergysid = usergys.id
+   		and gysypml_control.ypxxid = ypxx.id
+
+		<include refid="yycg.business.dao.mapper.GysypmlMapperCustom.query_gysypmlcontrol_where"></include>
+		<include refid="yycg.base.dao.mapper.SysuserMapperCustom.query_usergys_where"></include>
+		<include refid="yycg.business.dao.mapper.YpxxMapperCustom.query_ypxx_where"></include>
+  		
+  		 
+
+		<if test="pageQuery!=null">
+			)page_sysuser1
+		<![CDATA[
+		where rownum <= ${pageQuery.PageQuery_end}
+		]]>
+		)page_sysuser2
+
+		where
+		page_sysuser2.page_num >= ${pageQuery.PageQuery_start}
+ 		
+		</if>
+  		</select>
+  		<select id="findGysypmControlCount" parameterType="yycg.business.pojo.vo.GysypmlQueryVo"
+  		resultType="int">
+  		
+  	
+  		
+  		select
+		count(*)
+
+		from usergys, gysypml_control, ypxx
+		where gysypml_control.usergysid = usergys.id
+		and gysypml_control.ypxxid = ypxx.id
+	
+		<include refid="yycg.business.dao.mapper.GysypmlMapperCustom.query_gysypmlcontrol_where"></include>
+		<include refid="yycg.base.dao.mapper.SysuserMapperCustom.query_usergys_where"></include>
+		<include refid="yycg.business.dao.mapper.YpxxMapperCustom.query_ypxx_where"></include>
+  			
+  		
+  		</select>
+</mapper>

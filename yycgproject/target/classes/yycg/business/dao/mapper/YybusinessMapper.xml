@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="yycg.business.dao.mapper.YybusinessMapper" >
+  <resultMap id="BaseResultMap" type="yycg.business.pojo.po.Yybusiness" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="YYCGDID" property="yycgdid" jdbcType="VARCHAR" />
+    <result column="USERYYID" property="useryyid" jdbcType="VARCHAR" />
+    <result column="YPXXID" property="ypxxid" jdbcType="VARCHAR" />
+    <result column="ZBJG" property="zbjg" jdbcType="FLOAT" />
+    <result column="JYJG" property="jyjg" jdbcType="FLOAT" />
+    <result column="CGL" property="cgl" jdbcType="DECIMAL" />
+    <result column="CGJE" property="cgje" jdbcType="FLOAT" />
+    <result column="CGZT" property="cgzt" jdbcType="CHAR" />
+    <result column="RKL" property="rkl" jdbcType="DECIMAL" />
+    <result column="RKJE" property="rkje" jdbcType="FLOAT" />
+    <result column="RKDH" property="rkdh" jdbcType="VARCHAR" />
+    <result column="YPPH" property="ypph" jdbcType="VARCHAR" />
+    <result column="YPYXQ" property="ypyxq" jdbcType="FLOAT" />
+    <result column="RKTIME" property="rktime" jdbcType="TIMESTAMP" />
+    <result column="FHTIME" property="fhtime" jdbcType="TIMESTAMP" />
+    <result column="YYTHDID" property="yythdid" jdbcType="VARCHAR" />
+    <result column="THL" property="thl" jdbcType="VARCHAR" />
+    <result column="THJE" property="thje" jdbcType="FLOAT" />
+    <result column="THZT" property="thzt" jdbcType="CHAR" />
+    <result column="THYY" property="thyy" jdbcType="VARCHAR" />
+    <result column="YYJSDID" property="yyjsdid" jdbcType="VARCHAR" />
+    <result column="JSL" property="jsl" jdbcType="DECIMAL" />
+    <result column="JSJE" property="jsje" jdbcType="FLOAT" />
+    <result column="JSZT" property="jszt" jdbcType="CHAR" />
+    <result column="VCHAR1" property="vchar1" jdbcType="VARCHAR" />
+    <result column="VCHAR2" property="vchar2" jdbcType="VARCHAR" />
+    <result column="VCHAR3" property="vchar3" jdbcType="VARCHAR" />
+    <result column="USERGYSID" property="usergysid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, YYCGDID, USERYYID, YPXXID, ZBJG, JYJG, CGL, CGJE, CGZT, RKL, RKJE, RKDH, YPPH, 
+    YPYXQ, RKTIME, FHTIME, YYTHDID, THL, THJE, THZT, THYY, YYJSDID, JSL, JSJE, JSZT, 
+    VCHAR1, VCHAR2, VCHAR3, USERGYSID
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="yycg.business.pojo.po.YybusinessExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from YYBUSINESS${businessyear}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from YYBUSINESS${businessyear}
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from YYBUSINESS${businessyear}
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="yycg.business.pojo.po.YybusinessExample" >
+    delete from YYBUSINESS${businessyear}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="yycg.business.pojo.po.Yybusiness" >
+    insert into YYBUSINESS${businessyear} (ID, YYCGDID, USERYYID, 
+      YPXXID, ZBJG, JYJG, CGL, 
+      CGJE, CGZT, RKL, RKJE, 
+      RKDH, YPPH, YPYXQ, RKTIME, 
+      FHTIME, YYTHDID, THL, 
+      THJE, THZT, THYY, YYJSDID, 
+      JSL, JSJE, JSZT, VCHAR1, 
+      VCHAR2, VCHAR3, USERGYSID
+      )
+    values (#{id,jdbcType=VARCHAR}, #{yycgdid,jdbcType=VARCHAR}, #{useryyid,jdbcType=VARCHAR}, 
+      #{ypxxid,jdbcType=VARCHAR}, #{zbjg,jdbcType=FLOAT}, #{jyjg,jdbcType=FLOAT}, #{cgl,jdbcType=DECIMAL}, 
+      #{cgje,jdbcType=FLOAT}, #{cgzt,jdbcType=CHAR}, #{rkl,jdbcType=DECIMAL}, #{rkje,jdbcType=FLOAT}, 
+      #{rkdh,jdbcType=VARCHAR}, #{ypph,jdbcType=VARCHAR}, #{ypyxq,jdbcType=FLOAT}, #{rktime,jdbcType=TIMESTAMP}, 
+      #{fhtime,jdbcType=TIMESTAMP}, #{yythdid,jdbcType=VARCHAR}, #{thl,jdbcType=VARCHAR}, 
+      #{thje,jdbcType=FLOAT}, #{thzt,jdbcType=CHAR}, #{thyy,jdbcType=VARCHAR}, #{yyjsdid,jdbcType=VARCHAR}, 
+      #{jsl,jdbcType=DECIMAL}, #{jsje,jdbcType=FLOAT}, #{jszt,jdbcType=CHAR}, #{vchar1,jdbcType=VARCHAR}, 
+      #{vchar2,jdbcType=VARCHAR}, #{vchar3,jdbcType=VARCHAR}, #{usergysid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="yycg.business.pojo.po.Yybusiness" >
+    insert into YYBUSINESS${businessyear}
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="yycgdid != null" >
+        YYCGDID,
+      </if>
+      <if test="useryyid != null" >
+        USERYYID,
+      </if>
+      <if test="ypxxid != null" >
+        YPXXID,
+      </if>
+      <if test="zbjg != null" >
+        ZBJG,
+      </if>
+      <if test="jyjg != null" >
+        JYJG,
+      </if>
+      <if test="cgl != null" >
+        CGL,
+      </if>
+      <if test="cgje != null" >
+        CGJE,
+      </if>
+      <if test="cgzt != null" >
+        CGZT,
+      </if>
+      <if test="rkl != null" >
+        RKL,
+      </if>
+      <if test="rkje != null" >
+        RKJE,
+      </if>
+      <if test="rkdh != null" >
+        RKDH,
+      </if>
+      <if test="ypph != null" >
+        YPPH,
+      </if>
+      <if test="ypyxq != null" >
+        YPYXQ,
+      </if>
+      <if test="rktime != null" >
+        RKTIME,
+      </if>
+      <if test="fhtime != null" >
+        FHTIME,
+      </if>
+      <if test="yythdid != null" >
+        YYTHDID,
+      </if>
+      <if test="thl != null" >
+        THL,
+      </if>
+      <if test="thje != null" >
+        THJE,
+      </if>
+      <if test="thzt != null" >
+        THZT,
+      </if>
+      <if test="thyy != null" >
+        THYY,
+      </if>
+      <if test="yyjsdid != null" >
+        YYJSDID,
+      </if>
+      <if test="jsl != null" >
+        JSL,
+      </if>
+      <if test="jsje != null" >
+        JSJE,
+      </if>
+      <if test="jszt != null" >
+        JSZT,
+      </if>
+      <if test="vchar1 != null" >
+        VCHAR1,
+      </if>
+      <if test="vchar2 != null" >
+        VCHAR2,
+      </if>
+      <if test="vchar3 != null" >
+        VCHAR3,
+      </if>
+      <if test="usergysid != null" >
+        USERGYSID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="yycgdid != null" >
+        #{yycgdid,jdbcType=VARCHAR},
+      </if>
+      <if test="useryyid != null" >
+        #{useryyid,jdbcType=VARCHAR},
+      </if>
+      <if test="ypxxid != null" >
+        #{ypxxid,jdbcType=VARCHAR},
+      </if>
+      <if test="zbjg != null" >
+        #{zbjg,jdbcType=FLOAT},
+      </if>
+      <if test="jyjg != null" >
+        #{jyjg,jdbcType=FLOAT},
+      </if>
+      <if test="cgl != null" >
+        #{cgl,jdbcType=DECIMAL},
+      </if>
+      <if test="cgje != null" >
+        #{cgje,jdbcType=FLOAT},
+      </if>
+      <if test="cgzt != null" >
+        #{cgzt,jdbcType=CHAR},
+      </if>
+      <if test="rkl != null" >
+        #{rkl,jdbcType=DECIMAL},
+      </if>
+      <if test="rkje != null" >
+        #{rkje,jdbcType=FLOAT},
+      </if>
+      <if test="rkdh != null" >
+        #{rkdh,jdbcType=VARCHAR},
+      </if>
+      <if test="ypph != null" >
+        #{ypph,jdbcType=VARCHAR},
+      </if>
+      <if test="ypyxq != null" >
+        #{ypyxq,jdbcType=FLOAT},
+      </if>
+      <if test="rktime != null" >
+        #{rktime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fhtime != null" >
+        #{fhtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="yythdid != null" >
+        #{yythdid,jdbcType=VARCHAR},
+      </if>
+      <if test="thl != null" >
+        #{thl,jdbcType=VARCHAR},
+      </if>
+      <if test="thje != null" >
+        #{thje,jdbcType=FLOAT},
+      </if>
+      <if test="thzt != null" >
+        #{thzt,jdbcType=CHAR},
+      </if>
+      <if test="thyy != null" >
+        #{thyy,jdbcType=VARCHAR},
+      </if>
+      <if test="yyjsdid != null" >
+        #{yyjsdid,jdbcType=VARCHAR},
+      </if>
+      <if test="jsl != null" >
+        #{jsl,jdbcType=DECIMAL},
+      </if>
+      <if test="jsje != null" >
+        #{jsje,jdbcType=FLOAT},
+      </if>
+      <if test="jszt != null" >
+        #{jszt,jdbcType=CHAR},
+      </if>
+      <if test="vchar1 != null" >
+        #{vchar1,jdbcType=VARCHAR},
+      </if>
+      <if test="vchar2 != null" >
+        #{vchar2,jdbcType=VARCHAR},
+      </if>
+      <if test="vchar3 != null" >
+        #{vchar3,jdbcType=VARCHAR},
+      </if>
+      <if test="usergysid != null" >
+        #{usergysid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="yycg.business.pojo.po.YybusinessExample" resultType="java.lang.Integer" >
+    select count(*) from YYBUSINESS${businessyear}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update YYBUSINESS${businessyear}
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.yycgdid != null" >
+        YYCGDID = #{record.yycgdid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.useryyid != null" >
+        USERYYID = #{record.useryyid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ypxxid != null" >
+        YPXXID = #{record.ypxxid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zbjg != null" >
+        ZBJG = #{record.zbjg,jdbcType=FLOAT},
+      </if>
+      <if test="record.jyjg != null" >
+        JYJG = #{record.jyjg,jdbcType=FLOAT},
+      </if>
+      <if test="record.cgl != null" >
+        CGL = #{record.cgl,jdbcType=DECIMAL},
+      </if>
+      <if test="record.cgje != null" >
+        CGJE = #{record.cgje,jdbcType=FLOAT},
+      </if>
+      <if test="record.cgzt != null" >
+        CGZT = #{record.cgzt,jdbcType=CHAR},
+      </if>
+      <if test="record.rkl != null" >
+        RKL = #{record.rkl,jdbcType=DECIMAL},
+      </if>
+      <if test="record.rkje != null" >
+        RKJE = #{record.rkje,jdbcType=FLOAT},
+      </if>
+      <if test="record.rkdh != null" >
+        RKDH = #{record.rkdh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ypph != null" >
+        YPPH = #{record.ypph,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ypyxq != null" >
+        YPYXQ = #{record.ypyxq,jdbcType=FLOAT},
+      </if>
+      <if test="record.rktime != null" >
+        RKTIME = #{record.rktime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.fhtime != null" >
+        FHTIME = #{record.fhtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.yythdid != null" >
+        YYTHDID = #{record.yythdid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.thl != null" >
+        THL = #{record.thl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.thje != null" >
+        THJE = #{record.thje,jdbcType=FLOAT},
+      </if>
+      <if test="record.thzt != null" >
+        THZT = #{record.thzt,jdbcType=CHAR},
+      </if>
+      <if test="record.thyy != null" >
+        THYY = #{record.thyy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.yyjsdid != null" >
+        YYJSDID = #{record.yyjsdid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jsl != null" >
+        JSL = #{record.jsl,jdbcType=DECIMAL},
+      </if>
+      <if test="record.jsje != null" >
+        JSJE = #{record.jsje,jdbcType=FLOAT},
+      </if>
+      <if test="record.jszt != null" >
+        JSZT = #{record.jszt,jdbcType=CHAR},
+      </if>
+      <if test="record.vchar1 != null" >
+        VCHAR1 = #{record.vchar1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vchar2 != null" >
+        VCHAR2 = #{record.vchar2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vchar3 != null" >
+        VCHAR3 = #{record.vchar3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.usergysid != null" >
+        USERGYSID = #{record.usergysid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update YYBUSINESS${businessyear}
+    set ID = #{record.id,jdbcType=VARCHAR},
+      YYCGDID = #{record.yycgdid,jdbcType=VARCHAR},
+      USERYYID = #{record.useryyid,jdbcType=VARCHAR},
+      YPXXID = #{record.ypxxid,jdbcType=VARCHAR},
+      ZBJG = #{record.zbjg,jdbcType=FLOAT},
+      JYJG = #{record.jyjg,jdbcType=FLOAT},
+      CGL = #{record.cgl,jdbcType=DECIMAL},
+      CGJE = #{record.cgje,jdbcType=FLOAT},
+      CGZT = #{record.cgzt,jdbcType=CHAR},
+      RKL = #{record.rkl,jdbcType=DECIMAL},
+      RKJE = #{record.rkje,jdbcType=FLOAT},
+      RKDH = #{record.rkdh,jdbcType=VARCHAR},
+      YPPH = #{record.ypph,jdbcType=VARCHAR},
+      YPYXQ = #{record.ypyxq,jdbcType=FLOAT},
+      RKTIME = #{record.rktime,jdbcType=TIMESTAMP},
+      FHTIME = #{record.fhtime,jdbcType=TIMESTAMP},
+      YYTHDID = #{record.yythdid,jdbcType=VARCHAR},
+      THL = #{record.thl,jdbcType=VARCHAR},
+      THJE = #{record.thje,jdbcType=FLOAT},
+      THZT = #{record.thzt,jdbcType=CHAR},
+      THYY = #{record.thyy,jdbcType=VARCHAR},
+      YYJSDID = #{record.yyjsdid,jdbcType=VARCHAR},
+      JSL = #{record.jsl,jdbcType=DECIMAL},
+      JSJE = #{record.jsje,jdbcType=FLOAT},
+      JSZT = #{record.jszt,jdbcType=CHAR},
+      VCHAR1 = #{record.vchar1,jdbcType=VARCHAR},
+      VCHAR2 = #{record.vchar2,jdbcType=VARCHAR},
+      VCHAR3 = #{record.vchar3,jdbcType=VARCHAR},
+      USERGYSID = #{record.usergysid,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="yycg.business.pojo.po.Yybusiness" >
+    update YYBUSINESS${businessyear}
+    <set >
+      <if test="yycgdid != null" >
+        YYCGDID = #{yycgdid,jdbcType=VARCHAR},
+      </if>
+      <if test="useryyid != null" >
+        USERYYID = #{useryyid,jdbcType=VARCHAR},
+      </if>
+      <if test="ypxxid != null" >
+        YPXXID = #{ypxxid,jdbcType=VARCHAR},
+      </if>
+      <if test="zbjg != null" >
+        ZBJG = #{zbjg,jdbcType=FLOAT},
+      </if>
+      <if test="jyjg != null" >
+        JYJG = #{jyjg,jdbcType=FLOAT},
+      </if>
+      <if test="cgl != null" >
+        CGL = #{cgl,jdbcType=DECIMAL},
+      </if>
+      <if test="cgje != null" >
+        CGJE = #{cgje,jdbcType=FLOAT},
+      </if>
+      <if test="cgzt != null" >
+        CGZT = #{cgzt,jdbcType=CHAR},
+      </if>
+      <if test="rkl != null" >
+        RKL = #{rkl,jdbcType=DECIMAL},
+      </if>
+      <if test="rkje != null" >
+        RKJE = #{rkje,jdbcType=FLOAT},
+      </if>
+      <if test="rkdh != null" >
+        RKDH = #{rkdh,jdbcType=VARCHAR},
+      </if>
+      <if test="ypph != null" >
+        YPPH = #{ypph,jdbcType=VARCHAR},
+      </if>
+      <if test="ypyxq != null" >
+        YPYXQ = #{ypyxq,jdbcType=FLOAT},
+      </if>
+      <if test="rktime != null" >
+        RKTIME = #{rktime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fhtime != null" >
+        FHTIME = #{fhtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="yythdid != null" >
+        YYTHDID = #{yythdid,jdbcType=VARCHAR},
+      </if>
+      <if test="thl != null" >
+        THL = #{thl,jdbcType=VARCHAR},
+      </if>
+      <if test="thje != null" >
+        THJE = #{thje,jdbcType=FLOAT},
+      </if>
+      <if test="thzt != null" >
+        THZT = #{thzt,jdbcType=CHAR},
+      </if>
+      <if test="thyy != null" >
+        THYY = #{thyy,jdbcType=VARCHAR},
+      </if>
+      <if test="yyjsdid != null" >
+        YYJSDID = #{yyjsdid,jdbcType=VARCHAR},
+      </if>
+      <if test="jsl != null" >
+        JSL = #{jsl,jdbcType=DECIMAL},
+      </if>
+      <if test="jsje != null" >
+        JSJE = #{jsje,jdbcType=FLOAT},
+      </if>
+      <if test="jszt != null" >
+        JSZT = #{jszt,jdbcType=CHAR},
+      </if>
+      <if test="vchar1 != null" >
+        VCHAR1 = #{vchar1,jdbcType=VARCHAR},
+      </if>
+      <if test="vchar2 != null" >
+        VCHAR2 = #{vchar2,jdbcType=VARCHAR},
+      </if>
+      <if test="vchar3 != null" >
+        VCHAR3 = #{vchar3,jdbcType=VARCHAR},
+      </if>
+      <if test="usergysid != null" >
+        USERGYSID = #{usergysid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="yycg.business.pojo.po.Yybusiness" >
+    update YYBUSINESS${businessyear}
+    set YYCGDID = #{yycgdid,jdbcType=VARCHAR},
+      USERYYID = #{useryyid,jdbcType=VARCHAR},
+      YPXXID = #{ypxxid,jdbcType=VARCHAR},
+      ZBJG = #{zbjg,jdbcType=FLOAT},
+      JYJG = #{jyjg,jdbcType=FLOAT},
+      CGL = #{cgl,jdbcType=DECIMAL},
+      CGJE = #{cgje,jdbcType=FLOAT},
+      CGZT = #{cgzt,jdbcType=CHAR},
+      RKL = #{rkl,jdbcType=DECIMAL},
+      RKJE = #{rkje,jdbcType=FLOAT},
+      RKDH = #{rkdh,jdbcType=VARCHAR},
+      YPPH = #{ypph,jdbcType=VARCHAR},
+      YPYXQ = #{ypyxq,jdbcType=FLOAT},
+      RKTIME = #{rktime,jdbcType=TIMESTAMP},
+      FHTIME = #{fhtime,jdbcType=TIMESTAMP},
+      YYTHDID = #{yythdid,jdbcType=VARCHAR},
+      THL = #{thl,jdbcType=VARCHAR},
+      THJE = #{thje,jdbcType=FLOAT},
+      THZT = #{thzt,jdbcType=CHAR},
+      THYY = #{thyy,jdbcType=VARCHAR},
+      YYJSDID = #{yyjsdid,jdbcType=VARCHAR},
+      JSL = #{jsl,jdbcType=DECIMAL},
+      JSJE = #{jsje,jdbcType=FLOAT},
+      JSZT = #{jszt,jdbcType=CHAR},
+      VCHAR1 = #{vchar1,jdbcType=VARCHAR},
+      VCHAR2 = #{vchar2,jdbcType=VARCHAR},
+      VCHAR3 = #{vchar3,jdbcType=VARCHAR},
+      USERGYSID = #{usergysid,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

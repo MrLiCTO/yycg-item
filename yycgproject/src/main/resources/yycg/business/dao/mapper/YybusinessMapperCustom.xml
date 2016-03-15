@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="yycg.business.dao.mapper.YybusinessMapperCustom">
+
+
+	<!-- 交易明细列表sql片段 -->
+	<sql id="businesslist">
+		select
+		useryy.id useryyid,
+		useryy.mc useryymc,
+		yycgd.bm yycgdbm,
+		yycgd.id yycgdid,
+		usergys.id usergysid,
+		usergys.mc usergysmc,
+		yycgdmx.ypxxid,
+		ypxx.id,
+		ypxx.bm,
+		ypxx.mc,
+		ypxx.jx,
+		ypxx.gg,
+		ypxx.zhxs,
+		ypxx.scqymc,
+		ypxx.spmc,
+
+		ypxx.jyzt,
+
+		(select info
+		from dictinfo
+		where ypxx.jyzt = dictcode
+		and typecode = '003') jyztmc,
+		(select info
+		from dictinfo
+		where typecode = '011'
+		and dictcode = yycgdmx.cgzt) cgztmc,
+		yycgdmx.cgl,
+		yycgdmx.cgje,
+		yycgdmx.rkl,
+		yycgdmx.rkje,
+		yycgdmx.thl,
+		yycgdmx.thje,
+		yycgdmx.jsl,
+		yycgdmx.jsje
+
+		from yybusiness${businessyear} yycgdmx, yycgd${businessyear} yycgd,
+		useryy, usergys, ypxx
+		where yycgdmx.yycgdid = yycgd.id
+		and yycgd.useryyid = useryy.id
+		and yycgdmx.usergysid = usergys.id
+		and yycgdmx.ypxxid = ypxx.id
+		<include refid="yycg.base.dao.mapper.SysuserMapperCustom.query_useryy_where"></include>
+		<include
+			refid="yycg.base.dao.mapper.SysuserMapperCustom.query_usergys_where"></include>
+		<include refid="yycg.business.dao.mapper.YpxxMapperCustom.query_ypxx_where"></include>
+		<include
+			refid="yycg.business.dao.mapper.YycgdMapperCustom.query_yycgd_where"></include>
+		<include
+			refid="yycg.business.dao.mapper.YycgdMapperCustom.query_yycgdmx_where"></include>
+
+	</sql>
+
+
+
+	<select id="findYybusinessList" parameterType="yycg.business.pojo.vo.YycgdQueryVo"
+		resultType="yycg.business.pojo.vo.YycgdmxCustom">
+
+
+
+		<!-- 引入分页头 -->
+		<include refid="yycg.business.commenSql.page_start" />
+		<!-- 交易明细列表 -->
+		<include refid="businesslist" />
+
+		<!-- 分页尾部 -->
+		<include refid="yycg.business.commenSql.page_end" />
+
+
+
+	</select>
+	<select id="findYybusinessCount" parameterType="yycg.business.pojo.vo.YycgdQueryVo"
+		resultType="int">
+		select count(*) from (
+		<!-- 交易明细列表 -->
+		<include refid="businesslist" />
+		)
+
+	</select>
+
+
+
+	<!-- 按药品进行统计列表 -->
+	<select id="findYybusinessGroupbyYpxxList" parameterType="yycg.business.pojo.vo.YycgdQueryVo"
+		resultType="yycg.business.pojo.vo.YycgdmxCustom">
+		<!-- 引入分页头 -->
+		<include refid="yycg.business.commenSql.page_start" />
+
+		select
+		business.id,
+		business.bm,
+		business.mc,
+		sum(nvl(business.cgl,0))cgl,
+		sum(nvl(business.cgje,0))cgje,
+		sum(nvl(business.rkl,0))rkl,
+		sum(nvl(business.rkje,0))rkje,
+		sum(nvl(business.thl,0))thl,
+		sum(nvl(business.thje,0))thje,
+		sum(nvl(business.jsl,0))jsl,
+		sum(nvl(business.jsje,0))jsje
+		from (
+
+
+		<!-- 交易明细列表 -->
+		<include refid="businesslist" />
+
+		)business
+
+		<!-- 按药品统计 -->
+		group by business.id,business.bm,business.mc
+
+		<!-- 分页尾部 -->
+		<include refid="yycg.business.commenSql.page_end" />
+
+	</select>
+
+	<!-- 按药品进行统计列表总数 -->
+	<select id="findYybusinessGroupbyYpxxCount" parameterType="yycg.business.pojo.vo.YycgdQueryVo"
+		resultType="int">
+
+		select count(*) from (
+
+
+		select
+		business.id
+		from (
+
+
+		<!-- 交易明细列表 -->
+		<include refid="businesslist" />
+
+		)business
+
+		<!-- 按药品统计 -->
+		group by business.id
+
+		)
+
+
+	</select>
+</mapper>

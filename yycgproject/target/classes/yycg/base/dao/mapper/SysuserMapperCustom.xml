@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yycg.base.dao.mapper.SysuserMapperCustom" >
+	<sql id="query_usergys_where">
+		<if test="usergys!=null">
+				<if test="usergys.mc!=null and usergys.mc!=''">
+					and usergys.mc like '%${usergys.mc}%'
+				</if>
+				<if test="usergys.id!=null and usergys.id!=''">
+					and usergys.id = #{usergys.id}
+				</if>
+		</if>
+	</sql>
+	<sql id="query_useryy_where">
+		<if test="useryy!=null">
+				<if test="useryy.mc!=null and useryy.mc!=''">
+					and useryy.mc like '%${useryy.mc}%'
+				</if>
+				<if test="useryy.id!=null and useryy.id!=''">
+					and useryy.id=#{useryy.id}
+				</if>
+				<if test="useryy.dq!=null and useryy.dq!=''">
+					and useryy.id in (
+						select id from useryy where useryy.dq like '${useryy.dq}%'
+					)
+				</if>
+		</if>
+	</sql>
+	<sql id="query_sysuser_where">
+		<if test="sysuserCustom!=null">
+		
+			<if test="sysuserCustom.userid!=null and sysuserCustom.userid!=''">
+  				and sysuser.userid =#{sysuserCustom.userid}
+  			</if>
+  			
+  			
+  			<if test="sysuserCustom.username!=null and sysuserCustom.username!=''">
+  				and sysuser.username = #{sysuserCustom.username}
+  			</if>
+  			
+  			
+  			<if test="sysuserCustom.groupid!=null and sysuserCustom.groupid!=''">
+  				and sysuser.groupid = #{sysuserCustom.groupid}
+  			</if>
+  			
+		
+		
+  			<if test="sysuserCustom.sysmc!=null and sysuserCustom.sysmc!=''">
+  				and sysuser.mc like '%${sysuserCustom.sysmc}%'
+  			</if>
+  		</if>
+	
+	</sql>
+
+
+<!--  
+  	<select id="findSysuserList" parameterType="yycg.base.pojo.vo.SysuserQueryVo" 
+  	resultType="yycg.base.pojo.vo.SysuserCustom">
+  select * from (
+  		select sysuser.id,
+        sysuser.userid,
+        sysuser.username,
+        sysuser.groupid,
+        sysuser.sysid,
+        sysuser.userstate,
+        decode(sysuser.groupid,
+        '1',(select mc from userjd where id=sysuser.sysid),
+        '2',(select mc from userjd where id=sysuser.sysid),
+        '3',(select mc from useryy where id=sysuser.sysid),
+        '4',(select mc from usergys where id=sysuser.sysid)
+        ) sysmc
+   		from sysuser
+  )sysuser
+  <where>
+  		<include refid="query_sysuser_where"></include>
+  
+  </where>
+
+  	</select>
+ --> 	
+  	<select id="findSysuserList" parameterType="yycg.base.pojo.vo.SysuserQueryVo" 
+  	resultType="yycg.base.pojo.vo.SysuserCustom">
+  	<if test="pageQuery!=null">
+	select page_sysuser2.* from
+	(
+	select page_sysuser1.*,rownum page_num from
+	(
+	</if>
+	select * from (
+	select sysuser.id,
+	sysuser.userid,
+	（select info from dictinfo where dictinfo.dictcode=sysuser.groupid and typecode='s01'） groupname,
+	sysuser.username,
+	sysuser.groupid,
+	sysuser.sysid,
+	sysuser.userstate,
+	decode(sysuser.groupid,
+	'1',(select mc from userjd where id=sysuser.sysid),
+	'2',(select mc from userjd where id=sysuser.sysid),
+	'3',(select mc from useryy where id=sysuser.sysid),
+	'4',(select mc from usergys where id=sysuser.sysid)
+	) sysmc
+	from sysuser
+	)sysuser
+
+	<where>
+		<include refid="query_sysuser_where"></include>
+
+	</where>
+
+
+  		
+  	<if test="pageQuery!=null">
+	)page_sysuser1
+<![CDATA[
+	where rownum <= ${pageQuery.PageQuery_end}
+
+	)page_sysuser2
+
+	where
+	page_sysuser2.page_num >= ${pageQuery.PageQuery_start}
+ ]]>
+	</if>
+  	</select>
+  	
+  	<select id="findSysuserCount" parameterType="yycg.base.pojo.vo.SysuserQueryVo" 
+  	resultType="java.lang.Integer">
+  				select count(*) from (
+	select sysuser.id,
+	sysuser.userid,
+	sysuser.username,
+	sysuser.groupid,
+	sysuser.sysid,
+	sysuser.userstate,
+	decode(sysuser.groupid,
+	'1',(select mc from userjd where id=sysuser.sysid),
+	'2',(select mc from userjd where id=sysuser.sysid),
+	'3',(select mc from useryy where id=sysuser.sysid),
+	'4',(select mc from usergys where id=sysuser.sysid)
+	) sysmc
+	from sysuser
+	)sysuser
+
+	<where>
+		<include refid="query_sysuser_where"></include>
+
+	</where>
+  	</select>
+  	
+  	
+</mapper>

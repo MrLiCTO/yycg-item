@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="yycg.business.dao.mapper.YycgdMapperCustom" >
+
+		<sql id="query_yycgdmx_where">
+			<if test="yycgdmxCustom!=null">
+				<if test="yycgdmxCustom.yycgdid!=null and yycgdmxCustom.yycgdid!=''">
+					and yycgdmx.yycgdid=#{yycgdmxCustom.yycgdid}
+				</if>
+				<if test="yycgdmxCustom.cgzt!=null and yycgdmxCustom.cgzt!=''">
+					and yycgdmx.cgzt=#{yycgdmxCustom.cgzt}
+				</if>
+				<if test="yycgdmxCustom.usergysid!=null and yycgdmxCustom.usergysid!=''">
+					and yycgdmx.usergysid=#{yycgdmxCustom.usergysid}
+				</if>
+				
+			</if>
+		
+		</sql>
+		<sql id="query_yycgd_where">
+			<if test="yycgdCustom!=null">
+				<if test="yycgdCustom.id!=null and yycgdCustom.id!=''">
+					and yycgd.id=#{yycgdCustom.id}
+				</if>
+				<if test="yycgdCustom.bm!=null and yycgdCustom.bm!=''">
+					and yycgd.bm=#{yycgdCustom.bm}
+				</if>
+				
+				
+				<if test="yycgdCustom.cjtime_start!=null">
+					and yycgd.cjtime>=#{yycgdCustom.cjtime_start}
+				</if>
+				
+				<if test="yycgdCustom.cjtime_end!=null">
+				<![CDATA[
+					and yycgd.cjtime<=#{yycgdCustom.cjtime_end}
+				]]>
+				</if>
+				
+				
+				
+				<if test="yycgdCustom.mc!=null and yycgdCustom.mc!=''">
+					and yycgd.mc like '%${yycgdCustom.mc}%'
+				</if>
+				<if test="yycgdCustom.useryyid!=null and yycgdCustom.useryyid!=''">
+					and yycgd.useryyid=#{yycgdCustom.useryyid}
+					
+				</if>
+				<if test="yycgdCustom.zt!=null and yycgdCustom.zt!=''">
+					and yycgd.zt=#{yycgdCustom.zt}
+				</if>
+			</if>
+		
+		</sql>
+
+
+
+ 		<select id="getYycgdBm" parameterType="string" resultType="string">
+ 			select '${value}'||yycgdbm${value}.nextval bm from dual
+ 		</select>
+ 		
+ 		
+ 		<select id="findCgdmxList" parameterType="yycg.business.pojo.vo.YycgdQueryVo" resultType="yycg.business.pojo.vo.YycgdmxCustom">
+ 	<include refid="yycg.business.commenSql.page_start"></include>
+ 	select yycgdmx.id yycgdmxid,
+ 	 
+ 	  yycgd.bm yycgdbm,
+       yycgd.mc yycgdmc,
+       yycgd.cjtime,
+       (select info
+		from dictinfo
+		where typecode = '010'
+		and dictcode = yycgd.zt) yycgdztmc,
+       ypxx.id ypxxid,
+       ypxx.bm,
+       ypxx.mc,
+       ypxx.jx,
+       ypxx.gg,
+       ypxx.zhxs,
+       ypxx.scqymc,
+       ypxx.spmc,
+     
+       ypxx.jyzt,
+       (select info
+          from dictinfo
+         where ypxx.jyzt = dictinfo.dictcode
+           and dictinfo.typecode = '003') jyztmc,
+        yycgdmx.cgl,
+        yycgdmx.cgje,
+        yycgdmx.zbjg,
+        yycgdmx.jyjg,
+        yycgdmx.cgzt,
+        (select info from dictinfo where typecode='011' and dictcode=yycgdmx.cgzt)cgztmc,
+        usergys.mc usergysmc,
+        usergys.id usergysid,
+        useryy.mc useryymc,
+        useryy.id useryyid
+  from yycgdmx${businessyear} yycgdmx, yycgd${businessyear} yycgd, useryy,ypxx,usergys
+ where yycgdmx.yycgdid = yycgd.id
+   and yycgd.useryyid = useryy.id
+   and yycgdmx.ypxxid=ypxx.id
+   and yycgdmx.usergysid=usergys.id
+   
+  <!--  and yycgdmx.usergysid=''
+   and yycgd.zt='3'
+   and yycgdmx.cgzt='1' -->
+  
+   <include refid="query_yycgdmx_where"></include>
+   <include refid="query_yycgd_where"></include>
+   	<include refid="yycg.business.dao.mapper.YpxxMapperCustom.query_ypxx_where"></include>
+ <include refid="yycg.business.commenSql.page_end"></include>		
+ 	</select>
+ 		
+ 		
+ 		<select id="findCgdmxCount" parameterType="yycg.business.pojo.vo.YycgdQueryVo" resultType="int">
+ select count(*)
+  from yycgdmx${businessyear} yycgdmx, yycgd${businessyear} yycgd, useryy,ypxx,usergys
+ where yycgdmx.yycgdid = yycgd.id
+   and yycgd.useryyid = useryy.id
+   and yycgdmx.ypxxid=ypxx.id
+   and yycgdmx.usergysid=usergys.id
+  
+   <include refid="query_yycgdmx_where"></include>
+     <include refid="query_yycgd_where"></include>
+   	<include refid="yycg.business.dao.mapper.YpxxMapperCustom.query_ypxx_where"></include>
+ 		
+ 		</select>
+ 		
+ 		
+ 		
+ 		
+ 		 		
+ 		<select id="findCgdmxListSum" parameterType="yycg.business.pojo.vo.YycgdQueryVo" resultType="yycg.business.pojo.vo.YycgdmxCustom">
+
+ 	select sum(nvl(yycgdmx.cgl,0))cgl, sum(nvl(yycgdmx.cgje,0))cgje
+  from yycgdmx${businessyear} yycgdmx, yycgd${businessyear} yycgd, useryy, ypxx, usergys
+ where yycgdmx.yycgdid = yycgd.id
+   and yycgd.useryyid = useryy.id
+   and yycgdmx.ypxxid = ypxx.id
+   and yycgdmx.usergysid = usergys.id
+  
+   <include refid="query_yycgdmx_where"></include>
+   <include refid="query_yycgd_where"></include>
+   	<include refid="yycg.business.dao.mapper.YpxxMapperCustom.query_ypxx_where"></include>
+ 	
+ 	</select>
+ 		
+ 		
+ 		
+ 	
+	<select id="findAddYycgdmxList" parameterType="yycg.business.pojo.vo.YycgdQueryVo"
+		resultType="yycg.business.pojo.vo.YycgdmxCustom">
+
+		<if test="pageQuery!=null">
+			select page_sysuser2.* from
+			(
+			select page_sysuser1.*,rownum page_num from
+			(
+		</if>
+
+		<!-- 分页尾头 -->
+
+		select 
+		gysypml.id gysypmlid,
+		gysypml.ypxxid,
+		gysypml.usergysid,
+		usergys.mc usergysmc,
+		gysypml_control.control,
+		(select info
+		from dictinfo
+		where dictinfo.typecode = '008'
+		and dictinfo.dictcode = gysypml_control.control) controlmc,
+		ypxx.id,
+		ypxx.bm,
+		ypxx.mc,
+		ypxx.jx,
+		ypxx.gg,
+		ypxx.zhxs,
+		ypxx.scqymc,
+		ypxx.spmc,
+		ypxx.zbjg,
+		ypxx.jyzt,
+		(select info
+		from dictinfo
+		where ypxx.jyzt = dictinfo.dictcode
+		and dictinfo.typecode = '003') jyztmc
+		from gysypml, usergys, gysypml_control, ypxx
+		where gysypml.usergysid = usergys.id
+		and gysypml.ypxxid = gysypml_control.ypxxid
+		and gysypml.usergysid = gysypml_control.usergysid
+		and gysypml.ypxxid = ypxx.id
+		and gysypml.usergysid in (
+        select usergysarea.usergysid from usergysarea where #{useryy.dq} like usergysarea.areaid||'%'
+    	)
+   		and gysypml.ypxxid not in (
+        select yycgdmx.ypxxid from yycgdmx${businessyear} yycgdmx where yycgdmx.yycgdid=#{yycgdCustom.id}
+    	)
+
+		<include refid="yycg.business.dao.mapper.GysypmlMapperCustom.query_gysypml_where"></include>
+		<include refid="yycg.business.dao.mapper.GysypmlMapperCustom.query_gysypmlcontrol_where"></include>
+		<include refid="yycg.business.dao.mapper.YpxxMapperCustom.query_ypxx_where"></include>
+		<!-- 分页尾 -->
+
+		<if test="pageQuery!=null">
+			)page_sysuser1
+		<![CDATA[
+		where rownum <= ${pageQuery.PageQuery_end}
+		]]>
+		)page_sysuser2
+
+		where
+		page_sysuser2.page_num >= ${pageQuery.PageQuery_start}
+ 	
+		</if>
+  	</select>
+  	
+  	
+  	<select id="findAddYycgdmxCount" parameterType="yycg.business.pojo.vo.GysypmlQueryVo"
+		resultType="int">
+		select 
+		count(*)
+		from gysypml, usergys, gysypml_control, ypxx
+		where gysypml.usergysid = usergys.id
+		and gysypml.ypxxid = gysypml_control.ypxxid
+		and gysypml.usergysid = gysypml_control.usergysid
+		and gysypml.ypxxid = ypxx.id
+		and gysypml.usergysid in (
+        select usergysarea.usergysid from usergysarea where #{useryy.dq} like usergysarea.areaid||'%'
+    	)
+   		and gysypml.ypxxid not in (
+        select yycgdmx.ypxxid from yycgdmx${businessyear} yycgdmx where yycgdmx.yycgdid=#{yycgdCustom.id}
+    	)
+
+		<include refid="yycg.business.dao.mapper.GysypmlMapperCustom.query_gysypml_where"></include>
+		<include refid="yycg.business.dao.mapper.GysypmlMapperCustom.query_gysypmlcontrol_where"></include>
+		<include refid="yycg.business.dao.mapper.YpxxMapperCustom.query_ypxx_where"></include>
+		
+  	</select>
+  	
+  	<select id="findYycgdList" parameterType="yycg.business.pojo.vo.YycgdQueryVo"
+		resultType="yycg.business.pojo.vo.YycgdCustom">
+ 	<include refid="yycg.business.commenSql.page_start"></include>	
+
+	<!-- 分页尾头 -->
+	select yycgd.*,useryy.mc useryymc,
+	(select info from dictinfo where dictinfo.typecode='010' and
+	dictinfo.dictcode=yycgd.zt)yycgdztmc
+	from
+	yycgd${businessyear} yycgd, useryy
+	where
+	yycgd.useryyid = useryy.id
+	<include refid="query_yycgd_where"></include>
+	<include refid="yycg.base.dao.mapper.SysuserMapperCustom.query_useryy_where"></include>
+  	order by yycgd.id desc
+  		<!-- 分页尾 -->
+ 	<include refid="yycg.business.commenSql.page_end"></include>		
+  	</select>
+  	<select id="findYycgdCount" parameterType="yycg.business.pojo.vo.YycgdQueryVo"
+		resultType="int">
+	select count(*)
+	from
+	yycgd${businessyear} yycgd, useryy
+	where
+	yycgd.useryyid = useryy.id
+	<include refid="query_yycgd_where"></include>
+	<include refid="yycg.base.dao.mapper.SysuserMapperCustom.query_useryy_where"></include>
+  	</select>
+</mapper>

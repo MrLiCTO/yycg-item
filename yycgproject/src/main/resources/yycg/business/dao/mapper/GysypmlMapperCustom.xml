@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="yycg.business.dao.mapper.GysypmlMapperCustom">
+
+	<sql id="query_gysypml_where">
+		<if test="gysypmlCustom!=null">
+			<if test="gysypmlCustom.usergysid!=null and gysypmlCustom.usergysid!=''">
+				and gysypml.usergysid=#{gysypmlCustom.usergysid}
+
+			</if>
+			<if test="gysypmlCustom.ypxxid!=null and gysypmlCustom.ypxxid!=''">
+				and gysypml.ypxxid=#{gysypmlCustom.ypxxid}
+
+			</if>
+
+		</if>
+	</sql>
+	<sql id="query_gysypmlcontrol_where">
+		<if test="gysypmlCustom!=null">
+			<if test="gysypmlCustom.control!=null and gysypmlCustom.control!=''">
+				and gysypml_control.control=#{gysypmlCustom.control}
+			</if>
+
+			<if test="gysypmlCustom.usergysid!=null and gysypmlCustom.usergysid!=''">
+				and gysypml_control.usergysid=#{gysypmlCustom.usergysid}
+
+			</if>
+			<if test="gysypmlCustom.ypxxid!=null and gysypmlCustom.ypxxid!=''">
+				and gysypml_control.ypxxid=#{gysypmlCustom.ypxxid}
+
+			</if>
+		</if>
+	</sql>
+
+
+
+	<select id="findGysypmlList" parameterType="yycg.business.pojo.vo.GysypmlQueryVo"
+		resultType="yycg.business.pojo.vo.GysypmlCustom">
+
+		<if test="pageQuery!=null">
+			select page_sysuser2.* from
+			(
+			select page_sysuser1.*,rownum page_num from
+			(
+		</if>
+
+		<!-- 分页尾头 -->
+
+		select 
+		gysypml.id gysypmlid,
+		gysypml.ypxxid,
+		gysypml.usergysid,
+		usergys.mc usergysmc,
+		gysypml_control.control,
+		(select info
+		from dictinfo
+		where dictinfo.typecode = '008'
+		and dictinfo.dictcode = gysypml_control.control) controlmc,
+		ypxx.id,
+		ypxx.bm,
+		ypxx.mc,
+		ypxx.jx,
+		ypxx.gg,
+		ypxx.zhxs,
+		ypxx.scqymc,
+		ypxx.spmc,
+		ypxx.zbjg,
+		ypxx.jyzt,
+		(select info
+		from dictinfo
+		where ypxx.jyzt = dictinfo.dictcode
+		and dictinfo.typecode = '003') jyztmc
+		from gysypml, usergys, gysypml_control, ypxx
+		where gysypml.usergysid = usergys.id
+		and gysypml.ypxxid = gysypml_control.ypxxid
+		and gysypml.usergysid = gysypml_control.usergysid
+		and gysypml.ypxxid = ypxx.id
+
+		<include refid="query_gysypml_where"></include>
+		<include refid="query_gysypmlcontrol_where"></include>
+		<include refid="yycg.business.dao.mapper.YpxxMapperCustom.query_ypxx_where"></include>
+		<!-- 分页尾 -->
+
+		<if test="pageQuery!=null">
+			)page_sysuser1
+		<![CDATA[
+		where rownum <= ${pageQuery.PageQuery_end}
+		]]>
+		)page_sysuser2
+
+		where
+		page_sysuser2.page_num >= ${pageQuery.PageQuery_start}
+ 		
+		</if>
+  	</select>
+  	
+  	
+  	<select id="findGysypmlCount" parameterType="yycg.business.pojo.vo.GysypmlQueryVo"
+		resultType="int">
+
+	
+
+		select count(1)
+		from gysypml, usergys, gysypml_control, ypxx
+		where gysypml.usergysid = usergys.id
+		and gysypml.ypxxid = gysypml_control.ypxxid
+		and gysypml.usergysid = gysypml_control.usergysid
+		and gysypml.ypxxid = ypxx.id
+
+		<include refid="query_gysypml_where"></include>
+		<include refid="query_gysypmlcontrol_where"></include>
+		<include refid="yycg.business.dao.mapper.YpxxMapperCustom.query_ypxx_where"></include>
+		
+  	</select>
+  	
+  	<select id="findAddGysypmlList" parameterType="yycg.business.pojo.vo.GysypmlQueryVo" resultType="yycg.business.pojo.vo.GysypmlCustom">
+  		
+  			<if test="pageQuery!=null">
+			select page_sysuser2.* from
+			(
+			select page_sysuser1.*,rownum page_num from
+			(
+		</if>
+
+		<!-- 分页尾头 -->
+  		select 
+  		ypxx.id,
+       ypxx.bm,
+       ypxx.mc,
+       ypxx.jx,
+       ypxx.gg,
+       ypxx.zhxs,
+       ypxx.scqymc,
+       ypxx.spmc,
+       ypxx.zbjg,
+       ypxx.jyzt,
+       (select info
+          from dictinfo
+         where ypxx.jyzt = dictinfo.dictcode
+           and dictinfo.typecode = '003') jyztmc
+  		from ypxx
+ 		where not exists (select id
+          from gysypml
+         where usergysid = #{gysypmlCustom.usergysid}
+           and gysypml.ypxxid = ypxx.id)
+  		<include refid="yycg.business.dao.mapper.YpxxMapperCustom.query_ypxx_where"></include>
+  		
+  		<!-- 分页尾 -->
+
+		<if test="pageQuery!=null">
+			)page_sysuser1
+		<![CDATA[
+		where rownum <= ${pageQuery.PageQuery_end}
+
+		)page_sysuser2
+
+		where
+		page_sysuser2.page_num >= ${pageQuery.PageQuery_start}
+ 		]]>
+		</if>
+  	</select>
+  	<select id="findAddGysypmlCount" parameterType="yycg.business.pojo.vo.GysypmlQueryVo" resultType="int">
+  		
+ 
+  		select count(*)
+  		from ypxx
+ 		where not exists (select id
+          from gysypml
+         where usergysid = #{gysypmlCustom.usergysid}
+           and gysypml.ypxxid = ypxx.id)
+  		<include refid="yycg.business.dao.mapper.YpxxMapperCustom.query_ypxx_where"></include>
+  		
+  		
+  	</select>
+</mapper>
